@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class UserDao {
+public abstract class UserDao {
 
     private DataSource dataSource;
 
@@ -60,27 +60,66 @@ public class UserDao {
         return user;
     }
 
-    public void deleteAll() throws SQLException {
-        Connection conn = dataSource.getConnection();
-        String sql = "delete from users";
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.executeUpdate();
-        pstmt.close();
-        conn.close();
+    public void deleteAll() throws SQLException{
+        jdbcContextWithStatementStrategy(new DeleteAllStatement());
     }
 
     public int getCount() throws  SQLException {
-        Connection conn = dataSource.getConnection();
-        String sql = "select count(*) from users";
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        ResultSet rs = pstmt.executeQuery();
-        rs.next();
-        int count = rs.getInt(1);
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
-        rs.close();
-        pstmt.close();
-        conn.close();
-
+        int count = 0;
+        try {
+            conn = dataSource.getConnection();
+            String sql = "select count(*) from users";
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+            rs.next();
+            count = rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs!=null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (pstmt!=null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn!=null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return count;
     }
+
+    public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = dataSource.getConnection();
+            pstmt = stmt.makePreparedStatement(conn);
+            pstmt.executeQuery();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            if (pstmt!=null) { try { pstmt.close(); } catch (SQLException e) { e.printStackTrace(); }}
+            if (conn!=null) { try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }}
+        }
+    }
+
+    abstract protected PreparedStatement makeStatement(Connection conn) throws  SQLException;
 }
