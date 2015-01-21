@@ -21,7 +21,7 @@ public class UserDao {
         this.dataSource = dataSource;
     }
 
-    //TODO : 리플렉션으로 바꿔보기
+    //TODO : 리플렉션사용하여 리팩토링
     public void add(User user) throws SQLException {
         this.jdbcContext.executeSql("insert into users" + "(id, name, password)" + "values" + "(?,?,?)",
                 user.getId(), user.getName(), user.getPassword());
