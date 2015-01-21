@@ -10,37 +10,28 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public abstract class UserDao {
+public class UserDao {
 
     private DataSource dataSource;
-
+    private JdbcContext jdbcContext;
 
     public void setDataSource(DataSource dataSource) {
+        this.jdbcContext = new JdbcContext();
+        this.jdbcContext.setDataSource(dataSource);
         this.dataSource = dataSource;
     }
 
+    //TODO : 리플렉션으로 바꿔보기
     public void add(User user) throws SQLException {
-        Connection conn = dataSource.getConnection();
-        String sql = "INSERT INTO USERS"+
-                          "(id, name, password)"+
-                      "VALUES"+
-                          "(?,?,?)";
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, user.getId());
-        pstmt.setString(2, user.getName());
-        pstmt.setString(3, user.getPassword());
-
-        pstmt.execute();
-
-        pstmt.close();
-        conn.close();
+        this.jdbcContext.executeSql("insert into users" + "(id, name, password)" + "values" + "(?,?,?)",
+                user.getId(), user.getName(), user.getPassword());
     }
 
     public User get(String id) throws SQLException {
         Connection conn = dataSource.getConnection();
         String sql = "SELECT * FROM USERS WHERE ID = ?";
         PreparedStatement pstmt = conn.prepareStatement(sql);
-        
+
         pstmt.setString(1, id);
         ResultSet rs = pstmt.executeQuery();
         User user = null;
@@ -61,7 +52,7 @@ public abstract class UserDao {
     }
 
     public void deleteAll() throws SQLException{
-        jdbcContextWithStatementStrategy(new DeleteAllStatement());
+        this.jdbcContext.executeSql("delete from users");
     }
 
     public int getCount() throws  SQLException {
@@ -104,22 +95,4 @@ public abstract class UserDao {
         }
         return count;
     }
-
-    public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-
-        try {
-            conn = dataSource.getConnection();
-            pstmt = stmt.makePreparedStatement(conn);
-            pstmt.executeQuery();
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            if (pstmt!=null) { try { pstmt.close(); } catch (SQLException e) { e.printStackTrace(); }}
-            if (conn!=null) { try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }}
-        }
-    }
-
-    abstract protected PreparedStatement makeStatement(Connection conn) throws  SQLException;
 }
