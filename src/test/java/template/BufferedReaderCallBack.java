@@ -7,5 +7,5 @@ import java.io.IOException;
  * Created by Woo on 2015-01-22.
  */
 public interface BufferedReaderCallBack {
-    Integer doSomethingWithReader(BufferedReader br) throws IOException;
+    int doSomethingWithReader(BufferedReader br) throws IOException;
 }
