@@ -4,7 +4,7 @@
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="Tobi01" />
+          <element id="module-output" name="Toby" />
         </element>
       </element>
       <element id="directory" name="META-INF">
