@@ -8,7 +8,7 @@ import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import springbook.user.dao.UserDaoJdbc2;
+import springbook.user.dao.UserDaoJdbc;
 import springbook.user.domain.User;
 
 import javax.sql.DataSource;
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertThat;
 public class UserDaoTest {
 
     @Autowired
-    UserDaoJdbc2 dao;
+    UserDaoJdbc dao;
     @Autowired DataSource dataSource;   //SQLErrorCodeSQLExceptionTranslator 클래스 학습를 위한 의존객체 주입
 
     private User user1;

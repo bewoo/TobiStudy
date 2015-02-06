@@ -10,8 +10,8 @@ import javax.sql.DataSource;
 public class DaoFactory {
     
     @Bean
-    public UserDaoJdbc2 userDao() {
-        UserDaoJdbc2 userDao = new UserDaoJdbc2();
+    public UserDaoJdbc userDao() {
+        UserDaoJdbc userDao = new UserDaoJdbc();
         return userDao;
     }
     
