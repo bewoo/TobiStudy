@@ -9,6 +9,7 @@ import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import springbook.user.dao.UserDaoJdbc;
+import springbook.user.domain.Level;
 import springbook.user.domain.User;
 
 import javax.sql.DataSource;
@@ -22,8 +23,7 @@ import static org.junit.Assert.assertThat;
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 public class UserDaoTest {
 
-    @Autowired
-    UserDaoJdbc dao;
+    @Autowired UserDaoJdbc dao;
     @Autowired DataSource dataSource;   //SQLErrorCodeSQLExceptionTranslator 클래스 학습를 위한 의존객체 주입
 
     private User user1;
@@ -32,9 +32,9 @@ public class UserDaoTest {
 
     @Before
     public void setUp() {
-        this.user1 = new User("bewoo","우병은","1234");
-        this.user2 = new User("arlee","이아람","4321");
-        this.user3 = new User("mslee","이명선","2345");
+        this.user1 = new User("bewoo","우병은","1234", Level.BASIC, 1, 0);
+        this.user2 = new User("arlee","이아람","4321", Level.SILVER, 1, 0);
+        this.user3 = new User("mslee","이명선","2345", Level.GOLD, 1, 0);
     }
 
     @Test
@@ -47,12 +47,10 @@ public class UserDaoTest {
         assertThat(dao.getCount(), is(2));
 
         User userget1 = dao.get(user1.getId());
-        assertThat(userget1.getName(), is(user1.getName()));
-        assertThat(userget1.getPassword(), is(user1.getPassword()));
+        checkSameUser(userget1, user1);
 
-        User userget2 = dao.get(user1.getId());
-        assertThat(userget2.getName(), is(user1.getName()));
-        assertThat(userget2.getPassword(), is(user1.getPassword()));
+        User userget2 = dao.get(user2.getId());
+        checkSameUser(userget2, user2);
     }
 
     @Test
@@ -125,9 +123,31 @@ public class UserDaoTest {
         }
     }
 
+    @Test
+    public void update() {
+        dao.deleteAll();
+        dao.add(user1); //수정할 사용자
+        dao.add(user2); //수정
+
+        user1.setName("우정규");
+        user1.setPassword("570220");
+        user1.setLevel(Level.GOLD);
+        user1.setLogin(1000);
+        user1.setRecommend(999);
+        dao.update(user1);
+
+        User user1update = dao.get(user1.getId());
+        checkSameUser(user1, user1update);
+        User user2same = dao.get(user2.getId());
+        checkSameUser(user2, user2same);
+    }
+
     private void checkSameUser(User user1, User user2) {
         assertThat(user1.getId(), is(user2.getId()));
         assertThat(user1.getName(), is(user2.getName()));
         assertThat(user1.getPassword(), is(user2.getPassword()));
+        assertThat(user1.getLevel(), is(user2.getLevel()));
+        assertThat(user1.getLogin(), is(user2.getLogin()));
+        assertThat(user1.getRecommend(), is(user2.getRecommend()));
     }
 }
