@@ -9,7 +9,7 @@ import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import springbook.user.dao.UserDaoJdbc;
-import springbook.user.domain.Level;
+import springbook.user.domain.Level2;
 import springbook.user.domain.User;
 
 import javax.sql.DataSource;
@@ -32,9 +32,9 @@ public class UserDaoTest {
 
     @Before
     public void setUp() {
-        this.user1 = new User("bewoo","우병은","1234", Level.BASIC, 1, 0);
-        this.user2 = new User("arlee","이아람","4321", Level.SILVER, 1, 0);
-        this.user3 = new User("mslee","이명선","2345", Level.GOLD, 1, 0);
+        this.user1 = new User("bewoo","우병은","1234", Level2.BASIC, 1, 0);
+        this.user2 = new User("arlee","이아람","4321", Level2.SILVER, 1, 0);
+        this.user3 = new User("mslee","이명선","2345", Level2.GOLD, 1, 0);
     }
 
     @Test
@@ -131,7 +131,7 @@ public class UserDaoTest {
 
         user1.setName("우정규");
         user1.setPassword("570220");
-        user1.setLevel(Level.GOLD);
+        user1.setLevel(Level2.GOLD);
         user1.setLogin(1000);
         user1.setRecommend(999);
         dao.update(user1);
