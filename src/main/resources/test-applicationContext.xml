@@ -18,5 +18,8 @@
     <bean id="userDao" class="springbook.user.dao.UserDaoJdbc">
         <property name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
-    
+
+    <bean id="userService" class="springbook.user.service.UserService">
+        <property name="userDao" ref="userDao"/>
+    </bean>
 </beans>
