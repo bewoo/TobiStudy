@@ -8,16 +8,14 @@ import springbook.user.domain.Level;
 import springbook.user.domain.User;
 import springbook.user.service.UserService;
 
-import static springbook.user.service.UserService.MIN_LOGCOUNT_FOR_SILVER;
-import static springbook.user.service.UserService.MIN_RECCMEND_FOR_GOLD;
-
 import javax.annotation.Resource;
-
 import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_LOGCOUNT_FOR_SILVER;
+import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_RECCMEND_FOR_GOLD;
 
 /**
  * Created by Woo on 2015-02-11.
