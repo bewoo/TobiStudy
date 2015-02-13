@@ -12,10 +12,11 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 
+import static junit.framework.Assert.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_LOGCOUNT_FOR_SILVER;
-import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_RECCMEND_FOR_GOLD;
+import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND_FOR_GOLD;
 
 /**
  * Created by Woo on 2015-02-11.
@@ -24,7 +25,8 @@ import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_RECCMEND
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 public class UserServiceTest {
 
-    @Resource(name="userService") UserService userService;
+    @Resource(name="userService")
+    UserService userService;
     @Resource(name="userDao") UserDao userDao;
 
     List<User> users;
@@ -34,8 +36,8 @@ public class UserServiceTest {
         users = Arrays.asList(
                 new User("bewoo","우병은","1234", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER-1, 0),
                 new User("arlee","이아람","2345",Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0),
-                new User("mslee","이명선","3456",Level.SILVER, 60, MIN_RECCMEND_FOR_GOLD-1),
-                new User("sywoo","우세연","4567",Level.SILVER, 60, MIN_RECCMEND_FOR_GOLD),
+                new User("mslee","이명선","3456",Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD -1),
+                new User("sywoo","우세연","4567",Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD),
                 new User("jkwoo","우정규","5678",Level.GOLD, 100, Integer.MAX_VALUE));
     }
 
@@ -68,7 +70,24 @@ public class UserServiceTest {
 
         assertThat(userWithLevel.getLevel(), is(userWithLevelRead.getLevel()));
         assertThat(userWithoutLevelRead.getLevel(), is(Level.BASIC));
+    }
 
+    @Test
+    public void upgradeAIIOrNothing() {
+        UserService testUserService = new TestUserService(users.get(3).getId());
+        testUserService.setUserDao(this.userDao);
+
+        userDao.deleteAll();
+        for(User user : users) userDao.add(user);
+
+        try {
+            testUserService.upgradeLevels();
+            fail("TestUserServiceException expected");
+        }
+        catch(TestUserServiceException e) {
+        }
+
+        checkLevelUpgraded(users.get(1), false);
     }
 
     private void checkLevelUpgraded(User user, boolean upgraded) {
@@ -78,5 +97,21 @@ public class UserServiceTest {
         } else {
             assertThat(userUpdate.getLevel(), is(user.getLevel()));
         }
+    }
+
+    static class TestUserService extends UserService {
+        private String id;
+
+        private TestUserService(String id) {
+            this.id = id;
+        }
+
+        protected void upgradeLevel(User user) {
+            if (user.getId().equals(this.id)) throw new TestUserServiceException();
+            super.upgradeLevel(user);
+        }
+    }
+
+    static class TestUserServiceException extends RuntimeException {
     }
 }
