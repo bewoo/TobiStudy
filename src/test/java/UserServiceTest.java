@@ -1,14 +1,16 @@
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.PlatformTransactionManager;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
 import springbook.user.service.UserService;
 
-import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,9 +27,9 @@ import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_RECCOMEN
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 public class UserServiceTest {
 
-    @Resource(name="userService")
-    UserService userService;
-    @Resource(name="userDao") UserDao userDao;
+    @Autowired UserService userService;
+    @Autowired UserDao userDao;
+    @Autowired PlatformTransactionManager transactionManager;
 
     List<User> users;
 
@@ -42,7 +44,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void upgradeLevels() {
+    public void upgradeLevels() throws Exception {
         userDao.deleteAll();
         for(User user : users) userDao.add(user);
 
@@ -74,8 +76,10 @@ public class UserServiceTest {
 
     @Test
     public void upgradeAIIOrNothing() {
+
         UserService testUserService = new TestUserService(users.get(3).getId());
         testUserService.setUserDao(this.userDao);
+        testUserService.setTransactionManager(this.transactionManager);
 
         userDao.deleteAll();
         for(User user : users) userDao.add(user);

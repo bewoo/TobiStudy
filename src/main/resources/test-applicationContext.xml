@@ -23,10 +23,13 @@
         <property name="userDao" ref="userDao"/>
     </bean>
 
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+    </bean>
+
     <bean id="userService" class="springbook.user.service.UserService">
         <property name="userDao" ref="userDao"/>
         <property name="userLevelUpgradePolicy" ref="userLevelUpgradePolicy"/>
+        <property name="transactionManager" ref="transactionManager"/>
     </bean>
-
-
 </beans>

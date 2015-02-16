@@ -13,11 +13,12 @@ import java.util.List;
 
 public class UserDaoJdbc implements UserDao{
 
+    private JdbcTemplate jdbcTemplate;
+
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private JdbcTemplate jdbcTemplate;
     private RowMapper<User> userMapper = new RowMapper<User>() {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
