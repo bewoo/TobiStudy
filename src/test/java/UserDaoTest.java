@@ -19,6 +19,9 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_LOGCOUNT_FOR_SILVER;
+import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND_FOR_GOLD;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 public class UserDaoTest {
@@ -32,9 +35,9 @@ public class UserDaoTest {
 
     @Before
     public void setUp() {
-        this.user1 = new User("bewoo","우병은","1234", Level.BASIC, 1, 0);
-        this.user2 = new User("arlee","이아람","4321", Level.SILVER, 1, 0);
-        this.user3 = new User("mslee","이명선","2345", Level.GOLD, 1, 0);
+        this.user1 = new User("bewoo","우병은","1234", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER-1, 0, "bewoo@gmail.com");
+        this.user2 = new User("arlee","이아람","2345",Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0, "arlee@gmail.com");
+        this.user3 = new User("mslee","이명선","3456",Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD -1, "mslee@gmail.com");
     }
 
     @Test
@@ -134,6 +137,7 @@ public class UserDaoTest {
         user1.setLevel(Level.GOLD);
         user1.setLogin(1000);
         user1.setRecommend(999);
+        user1.setEmail("jkwoo@gmail.com");
         dao.update(user1);
 
         User user1update = dao.get(user1.getId());
@@ -149,5 +153,6 @@ public class UserDaoTest {
         assertThat(user1.getLevel(), is(user2.getLevel()));
         assertThat(user1.getLogin(), is(user2.getLogin()));
         assertThat(user1.getRecommend(), is(user2.getRecommend()));
+        assertThat(user1.getEmail(), is(user2.getEmail()));
     }
 }
