@@ -13,6 +13,8 @@ import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
 import springbook.user.service.UserService;
+import springbook.user.service.UserServiceImpl;
+import springbook.user.service.UserServiceTx;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +34,7 @@ import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_RECCOMEN
 public class UserServiceTest {
 
     @Autowired UserService userService;
+    @Autowired UserServiceImpl userServiceImpl;
     @Autowired UserDao userDao;
     @Autowired PlatformTransactionManager transactionManager;
     @Autowired MailSender mailSender;
@@ -54,8 +57,9 @@ public class UserServiceTest {
         userDao.deleteAll();
         for(User user : users) userDao.add(user);
 
+
         MockMailSender mockMailSender = new MockMailSender();
-        userService.setMailSender(mockMailSender);
+        userServiceImpl.setMailSender(mockMailSender);
 
         userService.upgradeLevels();
 
@@ -92,15 +96,20 @@ public class UserServiceTest {
     @Test
     public void upgradeAIIOrNothing() {
 
-        UserService testUserService = new TestUserService(users.get(3).getId());
+        TestUserService testUserService = new TestUserService(users.get(3).getId());
         testUserService.setUserDao(this.userDao);
-        testUserService.setTransactionManager(this.transactionManager);
         testUserService.setMailSender(this.mailSender);
+
+        UserServiceTx txUserService = new UserServiceTx();
+        txUserService.setTransactionManager(this.transactionManager);
+        txUserService.setUserService(testUserService);
+
         userDao.deleteAll();
+
         for(User user : users) userDao.add(user);
 
         try {
-            testUserService.upgradeLevels();
+            txUserService.upgradeLevels();
             fail("TestUserServiceException expected");
         }
         catch(TestUserServiceException e) {
@@ -118,7 +127,7 @@ public class UserServiceTest {
         }
     }
 
-    static class TestUserService extends UserService {
+    static class TestUserService extends UserServiceImpl {
         private String id;
 
         private TestUserService(String id) {

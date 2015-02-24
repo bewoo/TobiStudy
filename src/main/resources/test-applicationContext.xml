@@ -29,10 +29,15 @@
 
     <bean id="mailSender" class="springbook.user.service.DummyMailSender" />
 
-    <bean id="userService" class="springbook.user.service.UserService">
-        <property name="userDao" ref="userDao"/>
-        <property name="userLevelUpgradePolicy" ref="userLevelUpgradePolicy"/>
+    <bean id="userService" class="springbook.user.service.UserServiceTx">
         <property name="transactionManager" ref="transactionManager"/>
+        <property name="userService" ref="userServiceImpl"/>
+    </bean>
+
+    <bean id="userServiceImpl" class="springbook.user.service.UserServiceImpl">
+        <property name="userDao" ref="userDao"/>
+        <!--<property name="userLevelUpgradePolicy" ref="userLevelUpgradePolicy"/>-->
         <property name="mailSender" ref="mailSender" />
     </bean>
+
 </beans>
