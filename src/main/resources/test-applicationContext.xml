@@ -30,10 +30,10 @@
     <bean id="mailSender" class="springbook.user.service.DummyMailSender" />
 
     <!-- Decorator -->
-    <bean id="userService" class="springbook.user.service.UserServiceTx">
+    <!--<bean id="userService" class="springbook.user.service.UserServiceTx">
         <property name="transactionManager" ref="transactionManager"/>
         <property name="userService" ref="userServiceImpl"/>
-    </bean>
+    </bean>-->
 
     <!-- Target -->
     <bean id="userServiceImpl" class="springbook.user.service.UserServiceImpl">

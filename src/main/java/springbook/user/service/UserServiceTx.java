@@ -7,7 +7,9 @@ import springbook.user.domain.User;
 
 /**
  * Created by Woo on 2015-02-25.
+ * Dynamic Proxy 사용으로 Deprecated 되었음
  */
+@Deprecated
 public class UserServiceTx implements UserService{
 
     UserService userService;

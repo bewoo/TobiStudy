@@ -13,10 +13,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
+import springbook.user.service.TransactionHandler;
 import springbook.user.service.UserService;
 import springbook.user.service.UserServiceImpl;
-import springbook.user.service.UserServiceTx;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,10 +25,9 @@ import java.util.List;
 import static junit.framework.Assert.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_LOGCOUNT_FOR_SILVER;
 import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND_FOR_GOLD;
-
-import static org.mockito.Mockito.*;
 
 /**
  * Created by Woo on 2015-02-11.
@@ -107,9 +107,13 @@ public class UserServiceTest {
         testUserService.setUserDao(this.userDao);
         testUserService.setMailSender(this.mailSender);
 
-        UserServiceTx txUserService = new UserServiceTx();
-        txUserService.setTransactionManager(this.transactionManager);
-        txUserService.setUserService(testUserService);
+        TransactionHandler txHandler = new TransactionHandler();
+        txHandler.setTransactionManager(this.transactionManager);
+        txHandler.setTarget(testUserService);
+        txHandler.setPattern("upgradeLevels");
+
+
+        UserService txUserService = (UserService) Proxy.newProxyInstance(getClass().getClassLoader(), new Class[]{UserService.class}, txHandler);
 
         userDao.deleteAll();
 
