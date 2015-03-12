@@ -27,19 +27,17 @@
         <constructor-arg name="dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="mailSender" class="springbook.user.service.DummyMailSender" />
+    <bean id="mailSender" class="springbook.user.service.DummyMailSender"/>
 
-    <!-- Decorator -->
-    <!--<bean id="userService" class="springbook.user.service.UserServiceTx">
+    <bean id="userService" class="springbook.user.service.TxProxyFactoryBean">
+        <property name="target" ref="userServiceImpl"/>
         <property name="transactionManager" ref="transactionManager"/>
-        <property name="userService" ref="userServiceImpl"/>
-    </bean>-->
-
-    <!-- Target -->
-    <bean id="userServiceImpl" class="springbook.user.service.UserServiceImpl">
-        <property name="userDao" ref="userDao"/>
-        <!--<property name="userLevelUpgradePolicy" ref="userLevelUpgradePolicy"/>-->
-        <property name="mailSender" ref="mailSender" />
+        <property name="pattern" value="upgradeLevels"/>
+        <property name="serviceInterface" value="springbook.user.service.UserService"/>
     </bean>
 
+    <bean id="userServiceImpl" class="springbook.user.service.UserServiceImpl">
+        <property name="userDao" ref="userDao"/>
+        <property name="mailSender" ref="mailSender"/>
+    </bean>
 </beans>

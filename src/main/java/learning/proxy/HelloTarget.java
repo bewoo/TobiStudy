@@ -1,4 +1,4 @@
-package proxy;
+package learning.proxy;
 
 /**
  * Created by Woo on 2015-03-09.

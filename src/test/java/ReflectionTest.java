@@ -1,7 +1,7 @@
 import org.junit.Test;
-import proxy.Hello;
-import proxy.HelloTarget;
-import proxy.UppercaseHandler;
+import learning.proxy.Hello;
+import learning.proxy.HelloTarget;
+import learning.proxy.UppercaseHandler;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
