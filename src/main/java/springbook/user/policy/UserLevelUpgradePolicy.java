@@ -1,4 +1,4 @@
-package springbook.user.service;
+package springbook.user.policy;
 
 import springbook.user.domain.User;
 

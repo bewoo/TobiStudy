@@ -2,15 +2,14 @@ package springbook.user.service;
 
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.transaction.PlatformTransactionManager;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
 
 import java.util.List;
 
-import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_LOGCOUNT_FOR_SILVER;
-import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND_FOR_GOLD;
+import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_LOGCOUNT_FOR_SILVER;
+import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND_FOR_GOLD;
 
 /**
  * Created by Woo on 2015-02-11.

@@ -2,16 +2,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.PlatformTransactionManager;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
@@ -26,8 +23,8 @@ import static junit.framework.Assert.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
-import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_LOGCOUNT_FOR_SILVER;
-import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND_FOR_GOLD;
+import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_LOGCOUNT_FOR_SILVER;
+import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND_FOR_GOLD;
 
 /**
  * Created by Woo on 2015-02-11.
@@ -37,9 +34,8 @@ import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_RECCOMEN
 public class UserServiceTest {
 
     @Autowired UserService userService;
-    @Autowired UserServiceImpl userServiceImpl;
+    @Autowired UserService testUserService;
     @Autowired UserDao userDao;
-    @Autowired PlatformTransactionManager transactionManager;
     @Autowired MailSender mailSender;
 
     @Autowired ApplicationContext context;
@@ -126,29 +122,23 @@ public class UserServiceTest {
     }
 
     @Test
-    @DirtiesContext
     public void upgradeAllOrNothing() throws Exception{
-
-        TestUserService testUserService = new TestUserService(users.get(3).getId());
-        testUserService.setUserDao(this.userDao);
-        testUserService.setMailSender(this.mailSender);
-
-        ProxyFactoryBean pFBean =  context.getBean("&userService", ProxyFactoryBean.class);
-        pFBean.setTarget(testUserService);
-        UserService txUserService = (UserService) pFBean.getObject();
-
         userDao.deleteAll();
-
         for(User user : users) userDao.add(user);
 
         try {
-            txUserService.upgradeLevels();
+            this.testUserService.upgradeLevels();
             fail("TestUserServiceException expected");
         }
         catch(TestUserServiceException e) {
         }
 
         checkLevelUpgraded(users.get(1), false);
+    }
+
+    @Test
+    public void advisorAutoProxyCreator() {
+        assertThat(testUserService, is(java.lang.reflect.Proxy.class));
     }
 
     private void checkLevelUpgraded(User user, boolean upgraded) {
@@ -165,12 +155,8 @@ public class UserServiceTest {
         assertThat(updated.getLevel(), is(expectedLevel));
     }
 
-    static class TestUserService extends UserServiceImpl {
-        private String id;
-
-        private TestUserService(String id) {
-            this.id = id;
-        }
+    static class TestUserServiceImpl extends UserServiceImpl {
+        private String id = "sywoo";
 
         @Override
         protected void upgradeLevel(User user) {

@@ -8,7 +8,6 @@ import java.lang.reflect.Proxy;
 /**
  * Created by Woo on 2015-03-12.
  */
-//Spring ProxyFactoryBean을 이용하여 Proxy 생성함에 따른 조치
 @Deprecated
 public class TxProxyFactoryBean implements FactoryBean<Object> {
 

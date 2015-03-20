@@ -19,8 +19,8 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_LOGCOUNT_FOR_SILVER;
-import static springbook.user.service.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND_FOR_GOLD;
+import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_LOGCOUNT_FOR_SILVER;
+import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND_FOR_GOLD;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")

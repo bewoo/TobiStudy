@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 /**
  * Created by Woo on 2015-03-10.
  */
+@Deprecated
 public class TransactionHandler implements InvocationHandler {
     private Object target;
     private PlatformTransactionManager transactionManager;
