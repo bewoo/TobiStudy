@@ -117,5 +117,12 @@
             <artifactId>mockito-core</artifactId>
             <version>${org.mockito.version}</version>
         </dependency>
+
+        <!--aspectj-->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjtools</artifactId>
+            <version>1.8.5</version>
+        </dependency>
     </dependencies>
 </project>

@@ -7,6 +7,7 @@ import org.springframework.util.PatternMatchUtils;
 /**
  * Created by Woo on 2015-03-20.
  */
+@Deprecated
 public class NameMatchClassMethodPointcut extends NameMatchMethodPointcut{
     public void setMappedClassName(String mappedClassName) {
         this.setClassFilter(new SimpleClassFilter(mappedClassName));

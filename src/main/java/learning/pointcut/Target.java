@@ -1,9 +1,7 @@
 package learning.pointcut;
 
-/**
- * Created by Woo on 2015-03-24.
- */
-public class Target implements TargetInterface {
+public class Target implements TargetInterface{
+
     @Override
     public void hello() {
 
