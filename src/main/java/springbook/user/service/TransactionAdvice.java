@@ -9,6 +9,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 /**
  * Created by Woo on 2015-03-17.
  */
+@Deprecated
 public class TransactionAdvice implements MethodInterceptor {
 
     private PlatformTransactionManager transactionManager;
@@ -23,10 +24,10 @@ public class TransactionAdvice implements MethodInterceptor {
         try {
             Object ret = invocation.proceed();
             this.transactionManager.commit(status);
+            return ret;
         } catch (RuntimeException e) {
             this.transactionManager.rollback(status);
             throw e;
         }
-        return invocation.proceed();
     }
 }
