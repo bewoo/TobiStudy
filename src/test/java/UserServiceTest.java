@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -141,6 +142,12 @@ public class UserServiceTest {
         assertThat(testUserService, is(java.lang.reflect.Proxy.class));
     }
 
+    //TODO 집에서 테스트해보기
+    @Test(expected=TransientDataAccessResourceException.class)
+    public void readOnlyTransactionAttribute() {
+        testUserService.getAll();
+    }
+
     private void checkLevelUpgraded(User user, boolean upgraded) {
         User userUpdate = userDao.get(user.getId());
         if(upgraded) {
@@ -162,6 +169,14 @@ public class UserServiceTest {
         protected void upgradeLevel(User user) {
             if (user.getId().equals(this.id)) throw new TestUserServiceException();
             super.upgradeLevel(user);
+        }
+
+        @Override
+        public List<User> getAll() {
+            for(User user : super.getAll()) {
+                super.update(user);
+            }
+            return null;
         }
     }
 
