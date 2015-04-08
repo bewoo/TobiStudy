@@ -142,7 +142,6 @@ public class UserServiceTest {
         assertThat(testUserService, is(java.lang.reflect.Proxy.class));
     }
 
-    //TODO 집에서 테스트해보기
     @Test(expected=TransientDataAccessResourceException.class)
     public void readOnlyTransactionAttribute() {
         testUserService.getAll();
