@@ -17,8 +17,8 @@ import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND
 public class UserServiceImpl implements UserService{
 
     private UserDao userDao;
-    /*private UserLevelUpgradePolicy userLevelUpgradePolicy;*/
     private MailSender mailSender;
+    /*private UserLevelUpgradePolicy userLevelUpgradePolicy;*/
 
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;

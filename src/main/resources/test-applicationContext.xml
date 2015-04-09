@@ -17,6 +17,8 @@
         <property name="password" value="1234"/>
     </bean>
 
+    <tx:annotation-driven />
+
     <aop:config>
         <aop:pointcut id="transactionPointcut" expression="bean(*Service)" />
         <aop:advisor advice-ref="transactionAdvice" pointcut-ref="transactionPointcut" />
@@ -28,8 +30,6 @@
             <tx:method name="*" propagation="REQUIRED" />
         </tx:attributes>
     </tx:advice>
-
-    <tx:annotation-driven />
 
     <bean id = "jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource"/>
