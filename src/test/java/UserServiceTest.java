@@ -8,10 +8,14 @@ import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.test.annotation.NotTransactional;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
@@ -152,24 +156,11 @@ public class UserServiceTest {
     }
 
     @Test
+    //TODO : 롤백여부 확인
     public void transactionSync() {
         userService.deleteAll();
-        assertThat(userDao.getCount(), is(0));
-
-        DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
-        //txDefinition.setReadOnly(true);
-        TransactionStatus txStatus = transactionManager.getTransaction(txDefinition);
-
         userService.add(users.get(0));
         userService.add(users.get(1));
-
-        assertThat(userDao.getCount(), is(2));
-
-        //transactionManager.rollback(txStatus);
-        transactionManager.commit(txStatus);
-
-        assertThat(userDao.getCount(), is(2));
-
     }
 
     private void checkLevelUpgraded(User user, boolean upgraded) {
