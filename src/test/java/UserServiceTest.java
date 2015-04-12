@@ -8,15 +8,10 @@ import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.test.annotation.NotTransactional;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
@@ -37,6 +32,7 @@ import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND
 /**
  * Created by Woo on 2015-02-11.
  */
+@Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 public class UserServiceTest {
@@ -156,7 +152,6 @@ public class UserServiceTest {
     }
 
     @Test
-    //TODO : 롤백여부 확인
     public void transactionSync() {
         userService.deleteAll();
         userService.add(users.get(0));
