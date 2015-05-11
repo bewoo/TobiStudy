@@ -52,7 +52,7 @@ public class UserServiceTest {
     public void setUp() {
         users = Arrays.asList(
                 new User("bewoo","우병은","1234", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER-1, 0, "bewoo@gmail.com"),
-                new User("arlee","이아람","2345",Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0, "arlee@gmail.com"),
+                new User("kdhong","홍길동","2345",Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0, "kdhong@gmail.com"),
                 new User("mslee","이명선","3456",Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD -1, "mslee@gmail.com"),
                 new User("sywoo","우세연","4567",Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD, "sywoo@gmail.com"),
                 new User("jkwoo","우정규","5678",Level.GOLD, 100, Integer.MAX_VALUE, "jkwoo@gmail.com"));
@@ -72,7 +72,7 @@ public class UserServiceTest {
 
         List<User> updated = mockUserDao.getUpdated();
         assertThat(updated.size(), is(2));
-        checkUserAndLevel(updated.get(0), "arlee", Level.SILVER);
+        checkUserAndLevel(updated.get(0), "kdhong", Level.SILVER);
         checkUserAndLevel(updated.get(1), "sywoo", Level.GOLD);
 
         List<String> request = mockMailSender.getRequests();

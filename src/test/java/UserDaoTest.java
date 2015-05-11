@@ -36,7 +36,7 @@ public class UserDaoTest {
     @Before
     public void setUp() {
         this.user1 = new User("bewoo","우병은","1234", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER-1, 0, "bewoo@gmail.com");
-        this.user2 = new User("arlee","이아람","2345",Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0, "arlee@gmail.com");
+        this.user2 = new User("arlee","우세연","2345",Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0, "sywoo@gmail.com");
         this.user3 = new User("mslee","이명선","3456",Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD -1, "mslee@gmail.com");
     }
 
