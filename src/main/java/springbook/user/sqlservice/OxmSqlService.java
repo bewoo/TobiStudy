@@ -1,5 +1,7 @@
 package springbook.user.sqlservice;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.oxm.Unmarshaller;
 import springbook.user.dao.UserDao;
 import springbook.user.sqlservice.jaxb.SqlType;
@@ -26,8 +28,8 @@ public class OxmSqlService implements SqlService{
         this.oxmSqlReader.setUnmarshaller(unmarshaller);
     }
 
-    public void setSqlmapFile(String sqlmapFile) {
-        this.oxmSqlReader.sqlmapFile = sqlmapFile;
+    public void setSqlmap(Resource sqlmap) {
+        this.oxmSqlReader.sqlmap = sqlmap;
     }
 
     @PostConstruct
@@ -44,27 +46,26 @@ public class OxmSqlService implements SqlService{
 
     private class OxmSqlReader implements SqlReader {
         private Unmarshaller unmarshaller;
-        private static final String DEFAULT_SQLMAP_FILE = "sqlmap.xml";
-        private String sqlmapFile = DEFAULT_SQLMAP_FILE;
+        private Resource sqlmap = new ClassPathResource("sqlmap.xml", UserDao.class);
 
         public void setUnmarshaller(Unmarshaller unmarshaller) {
             this.unmarshaller = unmarshaller;
         }
 
-        public void setSqlmapFile(String sqlmapFile) {
-            this.sqlmapFile = sqlmapFile;
+        public void setSqlmapFile(Resource sqlmap) {
+            this.sqlmap = sqlmap;
         }
 
         @Override
         public void read(SqlRegistry sqlRegistry) {
             try {
-                Source source = new StreamSource(UserDao.class.getResourceAsStream(this.sqlmapFile));
+                Source source = new StreamSource(sqlmap.getInputStream());
                 Sqlmap sqlmap = (Sqlmap) this.unmarshaller.unmarshal(source);
                 for(SqlType sql : sqlmap.getSql()) {
                     sqlRegistry.registerSql(sql.getKey(), sql.getValue());
                 }
             }  catch (IOException e) {
-                throw new IllegalArgumentException(this.sqlmapFile + "을 가져올 수 없습니다.", e);
+                throw new IllegalArgumentException(this.sqlmap.getFilename() + "을 가져올 수 없습니다.", e);
             }
         }
     }
