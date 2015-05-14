@@ -29,7 +29,6 @@ public class ConcurrentHashMapSqlRegistry implements UpdatableSqlRegistry{
 
     @Override
     public void updateSql(Map<String, String> sqlmap) throws SqlUpdateFailureException {
-        //TODO:자바의 정석 495페이지 참고
         for(Map.Entry<String, String> entry : sqlmap.entrySet()) {
             updateSql(entry.getKey(), entry.getValue());
         }

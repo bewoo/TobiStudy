@@ -42,7 +42,7 @@
     <bean id="sqlService" class="springbook.user.sqlservice.OxmSqlService">
         <property name="unmarshaller" ref="unmarshaller" />
         <property name="sqlRegistry" ref="sqlRegistry" />
-    </bean>
+    </bean>arsclip
 
     <bean id="sqlRegistry" class="springbook.user.sqlservice.ConcurrentHashMapSqlRegistry" />
 
