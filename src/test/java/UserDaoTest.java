@@ -26,8 +26,6 @@ import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 public class UserDaoTest {
 
-    //TODO:ConcurrentHashMapSqlRegistry 빈설정 테스트
-
     @Autowired UserDaoJdbc dao;
     @Autowired DataSource dataSource;   //SQLErrorCodeSQLExceptionTranslator 클래스 학습를 위한 의존객체 주입
 
