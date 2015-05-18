@@ -19,12 +19,12 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
 import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_LOGCOUNT_FOR_SILVER;
 import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND_FOR_GOLD;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestApplicationContext.class)
+/*@ContextConfiguration(locations = "/test-applicationContext.xml")*/
 public class UserDaoTest {
 
     @Autowired UserDaoJdbc dao;
@@ -37,7 +37,7 @@ public class UserDaoTest {
     @Before
     public void setUp() {
         this.user1 = new User("bewoo","우병은","1234", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER-1, 0, "bewoo@gmail.com");
-        this.user2 = new User("arlee","우세연","2345",Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0, "sywoo@gmail.com");
+        this.user2 = new User("sywoo","우세연","2345",Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0, "sywoo@gmail.com");
         this.user3 = new User("mslee","이명선","3456",Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD -1, "mslee@gmail.com");
     }
 
@@ -87,15 +87,15 @@ public class UserDaoTest {
         dao.add(user2);
         List<User> users2 = dao.getAll();
         assertThat(users2.size(), is(2));
-        checkSameUser(user2, users2.get(0));
-        checkSameUser(user1, users2.get(1));
+        checkSameUser(user1, users2.get(0));
+        checkSameUser(user2, users2.get(1));
 
         dao.add(user3);
         List<User> users3 = dao.getAll();
         assertThat(users3.size(), is(3));
-        checkSameUser(user2, users3.get(0));
-        checkSameUser(user1, users3.get(1));
-        checkSameUser(user3, users3.get(2));
+        checkSameUser(user1, users3.get(0));
+        checkSameUser(user3, users3.get(1));
+        checkSameUser(user2, users3.get(2));
 
     }
 
@@ -130,8 +130,8 @@ public class UserDaoTest {
     @Test
     public void update() {
         dao.deleteAll();
-        dao.add(user1); //수정할 사용자
-        dao.add(user2); //수정
+        dao.add(user1);
+        dao.add(user2);
 
         user1.setName("우정규");
         user1.setPassword("570220");

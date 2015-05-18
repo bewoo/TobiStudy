@@ -11,7 +11,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.Transactional;
 import springbook.TestApplicationContext;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
@@ -33,9 +32,9 @@ import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND
 /**
  * Created by Woo on 2015-02-11.
  */
-@Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestApplicationContext.class)
+/*@ContextConfiguration(locations = "/test-applicationContext.xml")*/
 public class UserServiceTest {
 
     @Autowired UserService userService;
@@ -173,7 +172,7 @@ public class UserServiceTest {
         assertThat(updated.getLevel(), is(expectedLevel));
     }
 
-    public static class TestUserService extends UserServiceImpl {
+    static class TestUserService extends UserServiceImpl {
         private String id = "sywoo";
 
         @Override

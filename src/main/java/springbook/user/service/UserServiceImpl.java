@@ -18,15 +18,10 @@ public class UserServiceImpl implements UserService{
 
     private UserDao userDao;
     private MailSender mailSender;
-    /*private UserLevelUpgradePolicy userLevelUpgradePolicy;*/
 
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;
     }
-
-    /*public void setUserLevelUpgradePolicy(UserLevelUpgradePolicy userLevelUpgradePolicy) {
-        this.userLevelUpgradePolicy = userLevelUpgradePolicy;
-    }*/
 
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
@@ -61,9 +56,6 @@ public class UserServiceImpl implements UserService{
     public void upgradeLevels() {
         List<User> users = userDao.getAll();
         for(User user : users) {
-                /*if(userLevelUpgradePolicy.canUpgradeLevel(user)) {
-                    userLevelUpgradePolicy.upgradeLevel(user);
-                }*/
             if(canUpgradeLevel(user)) {
                 upgradeLevel(user);
             }
