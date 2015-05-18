@@ -8,6 +8,7 @@ import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import springbook.TestApplicationContext;
 import springbook.user.dao.UserDaoJdbc;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
@@ -23,7 +24,7 @@ import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_LOGCOUNT_
 import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND_FOR_GOLD;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/test-applicationContext.xml")
+@ContextConfiguration(classes = TestApplicationContext.class)
 public class UserDaoTest {
 
     @Autowired UserDaoJdbc dao;

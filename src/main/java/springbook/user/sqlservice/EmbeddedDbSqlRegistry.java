@@ -41,17 +41,8 @@ public class EmbeddedDbSqlRegistry implements UpdatableSqlRegistry{
 
     @Override
     public void updateSql(Map<String, String> sqlmap) throws SqlUpdateFailureException {
-        //TODO : hsql 하위버전 테스트....
         for(Map.Entry<String, String> entry : sqlmap.entrySet()) {
             updateSql(entry.getKey(), entry.getValue());
         }
-        /*transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus status) {
-                for(Map.Entry<String, String> entry : sqlmap.entrySet()) {
-                    updateSql(entry.getKey(), entry.getValue());
-                }
-            }
-        });*/
     }
 }
