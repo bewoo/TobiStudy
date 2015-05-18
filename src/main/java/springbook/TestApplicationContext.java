@@ -72,7 +72,7 @@ public class TestApplicationContext {
     @Bean
     public SqlRegistry sqlRegistry() {
         EmbeddedDbSqlRegistry sqlRegistry = new EmbeddedDbSqlRegistry();
-        sqlRegistry.setDataSource(embeddedDatabase());
+        //sqlRegistry.setDataSource(embeddedDatabase());
         return sqlRegistry;
     }
 
@@ -95,4 +95,12 @@ public class TestApplicationContext {
         userService.setMailSender(mailSender());
         return userService;
     }
+
+    @Bean
+    public UserService testUserService() {
+
+
+    }
+
+
 }
