@@ -27,7 +27,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-@ImportResource("/test-applicationContext.xml")
+@ImportResource("/spring/test-applicationContext.xml")
 public class TestApplicationContext {
 
     /**

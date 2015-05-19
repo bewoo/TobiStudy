@@ -14,7 +14,7 @@ import static org.junit.Assert.assertThat;
  * Created by Woo on 2015-03-12.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/factoryBeanTestContext.xml")
+@ContextConfiguration(locations = "/spring/factoryBeanTestContext.xml")
 public class FactoryBeanTest {
     @Autowired
     ApplicationContext context;

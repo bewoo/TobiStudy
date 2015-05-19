@@ -18,7 +18,7 @@ import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
  * Created by Woo on 2015-01-18.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/junit.xml")
+@ContextConfiguration("/spring/junit.xml")
 public class JUnitTest {
 
     @Autowired
