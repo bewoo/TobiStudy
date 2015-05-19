@@ -1,9 +1,9 @@
 package springbook;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -14,7 +14,6 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import springbook.user.dao.UserDao;
-import springbook.user.dao.UserDaoJdbc;
 import springbook.user.service.DummyMailSender;
 import springbook.user.service.UserService;
 import springbook.user.service.UserServiceImpl;
@@ -27,7 +26,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-@ImportResource("/spring/test-applicationContext.xml")
+@ComponentScan(basePackages = "springbook.user")
 public class TestApplicationContext {
 
     /**
@@ -57,25 +56,12 @@ public class TestApplicationContext {
      * 어플리케이션 로직 & 테스트
      */
 
-    @Bean
-    public JdbcTemplate jdbcTemplate() {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
-        jdbcTemplate.setDataSource(dataSource());
-        return jdbcTemplate;
-    }
-
-    @Bean
-    public UserDao userDao() {
-        UserDaoJdbc userDao = new UserDaoJdbc();
-        userDao.setJdbcTemplate(jdbcTemplate());
-        userDao.setSqlService(sqlService());
-        return userDao;
-    }
+    @Autowired UserDao userDao;
 
     @Bean
     public UserService userService() {
         UserServiceImpl userService = new UserServiceImpl();
-        userService.setUserDao(userDao());
+        userService.setUserDao(this.userDao);
         userService.setMailSender(mailSender());
         return userService;
     }
@@ -83,7 +69,7 @@ public class TestApplicationContext {
     /*@Bean
     public UserService testUserService() {
         TestUserService userService = new TestUserService();
-        userService.setUserDao(userDao());
+        userService.setUserDao(this.userDao);
         userService.setMailSender(mailSender());
         return userService;
     }*/
