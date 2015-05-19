@@ -24,7 +24,7 @@ import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestApplicationContext.class)
-/*@ContextConfiguration(locations = "/test-applicationContext.xml")*/
+//@ContextConfiguration(locations = "/spring/test-applicationContext.xml")
 public class UserDaoTest {
 
     @Autowired UserDaoJdbc dao;

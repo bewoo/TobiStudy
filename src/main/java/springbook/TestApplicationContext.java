@@ -15,8 +15,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import springbook.user.dao.UserDao;
 import springbook.user.service.DummyMailSender;
+import springbook.user.service.test.TestUserService;
 import springbook.user.service.UserService;
-import springbook.user.service.UserServiceImpl;
 import springbook.user.sqlservice.EmbeddedDbSqlRegistry;
 import springbook.user.sqlservice.OxmSqlService;
 import springbook.user.sqlservice.SqlRegistry;
@@ -27,6 +27,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "springbook.user")
+/*@ImportResource("/spring/test-applicationContext.xml")*/
 public class TestApplicationContext {
 
     /**
@@ -58,21 +59,21 @@ public class TestApplicationContext {
 
     @Autowired UserDao userDao;
 
-    @Bean
+    /*@Bean
     public UserService userService() {
         UserServiceImpl userService = new UserServiceImpl();
-        userService.setUserDao(this.userDao);
+        userService.setUserDao(userDao);
         userService.setMailSender(mailSender());
         return userService;
-    }
+    }*/
 
-    /*@Bean
+    @Bean
     public UserService testUserService() {
         TestUserService userService = new TestUserService();
         userService.setUserDao(this.userDao);
         userService.setMailSender(mailSender());
         return userService;
-    }*/
+    }
 
     /**
      * SQL 서비스

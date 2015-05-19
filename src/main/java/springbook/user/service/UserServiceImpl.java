@@ -1,7 +1,9 @@
 package springbook.user.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Service;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
@@ -14,10 +16,11 @@ import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND
 /**
  * Created by Woo on 2015-02-11.
  */
+@Service("userService")
 public class UserServiceImpl implements UserService{
 
-    private UserDao userDao;
-    private MailSender mailSender;
+    @Autowired private UserDao userDao;
+    @Autowired private MailSender mailSender;
 
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;

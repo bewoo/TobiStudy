@@ -9,10 +9,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.matchers.JUnitMatchers.either;
 import static org.junit.matchers.JUnitMatchers.hasItem;
-import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
 
 /**
  * Created by Woo on 2015-01-18.

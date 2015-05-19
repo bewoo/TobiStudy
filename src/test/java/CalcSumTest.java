@@ -5,7 +5,7 @@ import template.Calculator;
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by Woo on 2015-01-22.

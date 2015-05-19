@@ -135,7 +135,7 @@ public class UserServiceTest {
             this.testUserService.upgradeLevels();
             fail("TestUserServiceException expected");
         }
-        catch(TestUserServiceException e) {
+        catch(springbook.user.service.test.TestUserServiceException e) {
         }
 
         checkLevelUpgraded(users.get(1), false);
@@ -172,7 +172,7 @@ public class UserServiceTest {
         assertThat(updated.getLevel(), is(expectedLevel));
     }
 
-    static class TestUserService extends UserServiceImpl {
+    public static class TestUserService extends UserServiceImpl {
         private String id = "sywoo";
 
         @Override
