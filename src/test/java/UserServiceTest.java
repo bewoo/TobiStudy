@@ -3,15 +3,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.PlatformTransactionManager;
-import springbook.TestApplicationContext;
+import springbook.AppContext;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
@@ -33,18 +33,15 @@ import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND
  * Created by Woo on 2015-02-11.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestApplicationContext.class)
-/*@ContextConfiguration(locations = "/test-applicationContext.xml")*/
+@ContextConfiguration(classes = AppContext.class)
+@ActiveProfiles("test")
 public class UserServiceTest {
 
     @Autowired UserService userService;
     @Autowired UserService testUserService;
     @Autowired UserDao userDao;
-    @Autowired MailSender mailSender;
 
-    @Autowired ApplicationContext context;
-
-    @Autowired  PlatformTransactionManager transactionManager;
+    @Autowired DefaultListableBeanFactory bf;
 
     List<User> users;
 
@@ -83,13 +80,11 @@ public class UserServiceTest {
 
     @Test
     public void mockUpgradeLevels() throws Exception {
-
         UserServiceImpl userServiceImpl = new UserServiceImpl();
 
         UserDao mockUserDao = mock(UserDao.class);
         when(mockUserDao.getAll()).thenReturn(this.users);
         userServiceImpl.setUserDao(mockUserDao);
-
         MailSender mockMailSender = mock(MailSender.class);
         userServiceImpl.setMailSender(mockMailSender);
 
@@ -156,6 +151,13 @@ public class UserServiceTest {
         userService.deleteAll();
         userService.add(users.get(0));
         userService.add(users.get(1));
+    }
+
+    @Test
+    public void beans() {
+        for(String name : bf.getBeanDefinitionNames()) {
+            System.out.println(name + " \t" + bf.getBean(name).getClass().getName());
+        }
     }
 
     private void checkLevelUpgraded(User user, boolean upgraded) {
