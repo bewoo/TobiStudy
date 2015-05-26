@@ -1,5 +1,6 @@
 package springbook;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -15,6 +16,9 @@ import javax.sql.DataSource;
 
 @Configuration
 public class SqlServiceContext {
+
+    @Autowired SqlMapConfig sqlMapConfig;
+
     /**
      * SQL 서비스
      */
@@ -24,6 +28,7 @@ public class SqlServiceContext {
         OxmSqlService sqlService = new OxmSqlService();
         sqlService.setUnmarshaller(unmarshaller());
         sqlService.setSqlRegistry(sqlRegistry());
+        sqlService.setSqlmap(this.sqlMapConfig.getSqlMapResource());
         return sqlService;
     }
 
