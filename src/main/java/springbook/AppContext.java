@@ -21,7 +21,7 @@ import java.sql.Driver;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "springbook.user")
-@Import(SqlServiceContext.class)
+@EnableSqlService
 @PropertySource("/dao/database.properties")
 public class AppContext implements SqlMapConfig{
 
