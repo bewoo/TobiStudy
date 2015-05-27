@@ -2,6 +2,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
@@ -27,6 +28,8 @@ import static springbook.user.policy.DefaultUserLevelUpgradePolicy.MIN_RECCOMEND
 @ContextConfiguration(classes = AppContext.class)
 @ActiveProfiles("test")
 public class UserDaoTest {
+
+    @Autowired  DefaultListableBeanFactory bf;
 
     @Autowired UserDaoJdbc dao;
     @Autowired DataSource dataSource;   //SQLErrorCodeSQLExceptionTranslator 클래스 학습를 위한 의존객체 주입
@@ -146,6 +149,13 @@ public class UserDaoTest {
         checkSameUser(user1, user1update);
         User user2same = dao.get(user2.getId());
         checkSameUser(user2, user2same);
+    }
+
+    @Test
+    public void beans() {
+        for(String name : bf.getBeanDefinitionNames()) {
+            System.out.println(name + " \t" + bf.getBean(name).getClass().getName());
+        }
     }
 
     private void checkSameUser(User user1, User user2) {

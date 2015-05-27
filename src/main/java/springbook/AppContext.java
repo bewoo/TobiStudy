@@ -20,7 +20,7 @@ import java.sql.Driver;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = "springbook.user")
+@ComponentScan(basePackages = "springbook")
 @EnableSqlService
 @PropertySource("/dao/database.properties")
 public class AppContext implements SqlMapConfig{
